@@ -643,6 +643,7 @@ name = "news_letter"
 version = "0.1.0"
 dependencies = [
  "actix-web",
+ "tokio",
 ]
 
 [[package]]
