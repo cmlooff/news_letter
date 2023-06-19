@@ -7,7 +7,7 @@
 async fn health_check_works() {
   // spawn_app is dependent on our application code
   // Every test is agnostic 
-  spawn_app().await.expect("Failed to spawn our app. ");
+  spawn_app();
   // Need to bring in `reqwest` to perform HTTP requests against our app
   let client = reqwest::Client::new();
 
@@ -24,8 +24,8 @@ async fn health_check_works() {
 }
 
 // Launch our application in the background ~somehow~
-async fn spawn_app() -> Result<(), std::io::Error> {
+fn spawn_app() {
   let server = news_letter::run().expect("Failed to bind address");
 
-  let _ tokio::spawn(server);
+  let _ = tokio::spawn(server);
 }
