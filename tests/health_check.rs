@@ -5,7 +5,8 @@
 // cargo expand --test health_check <- name of test file 
 #[tokio::test]
 async fn health_check_works() {
-  // Arrange
+  // spawn_app is dependent on our application code
+  // Every test is agnostic 
   spawn_app().await.expect("Failed to spawn our app. ");
   // Need to bring in `reqwest` to perform HTTP requests against our app
   let client = reqwest::Client::new();
@@ -24,5 +25,7 @@ async fn health_check_works() {
 
 // Launch our application in the background ~somehow~
 async fn spawn_app() -> Result<(), std::io::Error> {
-  todo!()
+  let server = news_letter::run().expect("Failed to bind address");
+
+  let _ tokio::spawn(server);
 }
