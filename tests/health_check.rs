@@ -1,8 +1,8 @@
-// 'tokio::test' is the testing equivalent of 'tokio::main'
-// It also spares you from having to specify the #[test] attribute
+// [tokio::test] spares you from having to specify the #[test] attribute
 
-// To inspect code generated: 
-// cargo expand --test health_check <- name of test file 
+use news_letter::run;
+
+// To inspect code generated: cargo expand --test health_check <- name of test file 
 #[tokio::test]
 async fn health_check_works() {
   // spawn_app is dependent on our application code
@@ -25,7 +25,8 @@ async fn health_check_works() {
 
 // Launch our application in the background ~somehow~
 fn spawn_app() {
-  let server = news_letter::run().expect("Failed to bind address");
+  // Using the run method in news_letter lib
+  let server = run().expect("Failed to bind address");
 
   let _ = tokio::spawn(server);
 }
