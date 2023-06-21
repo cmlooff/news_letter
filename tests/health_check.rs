@@ -26,7 +26,7 @@ async fn health_check_works() {
 // Launch our application in the background ~somehow~
 fn spawn_app() {
   // Using the run method in news_letter lib
-  let server = run("127.0.0.1:8000").expect("Failed to bind address");
+  let server = news_letter::run("127.0.0.1:0").expect("Failed to bind address");
 
   let _ = tokio::spawn(server);
 }
