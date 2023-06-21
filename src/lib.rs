@@ -8,13 +8,13 @@ async fn health_check() -> HttpResponse {
 // Need to mark 'run' as public.
 // No longer a binary entrypoint, there we mark it as async
 // without having to use any proc-macro incantation.
-pub fn run() -> Result<Server, std::io::Error> {
+pub fn run(address: &str) -> Result<Server, std::io::Error> {
   let server = HttpServer::new( || {
     App::new()
       .route("/health_check", web::get().to(health_check))
   })
-  .bind("127.0.0.1:8000")?
-  .run();
+    .bind(address)?
+    .run();
 
-Ok(server)
+  Ok(server)
 }
