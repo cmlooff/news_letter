@@ -1,6 +1,8 @@
 use actix_web::dev::Server;
-use actix_web::{web, App, HttpResponse, HttpServer};
+use actix_web::{web, App, HttpServer};
 use std::net::TcpListener;
+use crate::routes::health_check;
+use crate::routes::subscribe;
 
 // No longer a binary entrypoint, there we mark it as async
 // without having to use any proc-macro incantation.

@@ -1,5 +1,5 @@
-use news_letter::run;
 use std::net::TcpListener;
+use news_letter::startup::run;
 
 #[tokio::main]
 async fn main() -> Result<(), std::io::Error> {

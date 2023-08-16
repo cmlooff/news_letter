@@ -1,8 +1,8 @@
-pub mod lib;
-
+use actix_web::HttpResponse;
 use std::net::TcpListener;
+use crate::startup::run;
 
-async fn health_check() -> HttpResponse {
+pub async fn health_check() -> HttpResponse {
   HttpResponse::Ok().finish()
 }
 
