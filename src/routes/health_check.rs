@@ -1,5 +1,10 @@
-use news_letter::run;
+pub mod lib;
+
 use std::net::TcpListener;
+
+async fn health_check() -> HttpResponse {
+  HttpResponse::Ok().finish()
+}
 
 // To inspect code generated: cargo expand --test health_check <- name of test file 
 #[tokio::test]
