@@ -57,6 +57,20 @@ async fn spawn_app() -> TestApp {
   }
 }
 
+pub async fn configure_database(config: &DatabaseSettings) -> PgPool {
+  // Create Database
+  let mut connection = PgConnection::connect(
+    &config.connection_string_without_db()
+  )
+  .await
+  .expect("Failed to connect to Postgres");
+
+  connection
+    .execute(format!(r#"CREATE DATABASE "{}";"#, config.database_name).as_str())
+    .await
+    .expect("Failed to create database...");
+}
+
 #[tokio::test]
 async fn subscribe_returns_a_200_for_valid_form_data() {
     // Arrange
