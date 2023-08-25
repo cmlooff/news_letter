@@ -1,7 +1,8 @@
-use news_letter::{startup::run, configuration::get_configuration};
+use news_letter::{startup::run, configuration::{get_configuration, DatabaseSettings}};
+use sqlx::{Connection, Executor, PgConnection, PgPool};
 use std::net::TcpListener;
 use actix_web::HttpResponse;
-use sqlx::PgPool;
+use uuid::Uuid;
 
 pub async fn health_check() -> HttpResponse {
   HttpResponse::Ok().finish()
@@ -15,7 +16,6 @@ pub struct TestApp {
 // To inspect code generated: cargo expand --test health_check <- name of test file 
 #[tokio::test]
 async fn health_check_works() {
-  // Every test is agnostic 
   let app = spawn_app().await;
   // Need to bring in `reqwest` to perform HTTP requests against our app
   let client = reqwest::Client::new();
@@ -42,15 +42,13 @@ async fn spawn_app() -> TestApp {
   let port = listener.local_addr().unwrap().port();
   let address = format!("http://127.0.0.1:{}", port);
 
-  let configuration = get_configuration().expect("Failed to read configuration");
-  let connection_pool = PgPool::connect (
-    &configuration.database.connection_string()
-  )
-  .await
-  .expect("Failed to connect to Postgres.");
+  let mut configuration = get_configuration().expect("Failed to read configuration");
+  configuration.database.database_name = Uuid::new_v4().to_string();
 
-  let server = run(listener, connection_pool.clone()).expect("Failed to bind address");
+  let connection_pool = configure_database(&configuration.database).await; 
 
+  let server = run(listener, connection_pool.clone())
+    .expect("Failed to bind address");
   let _ = tokio::spawn(server);
 
   TestApp {
