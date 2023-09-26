@@ -1,8 +1,10 @@
-use actix_web::dev::Server;
-use actix_web::{web, App, HttpServer};
-use std::net::TcpListener;
 use crate::routes::{health_check, subscribe};
+use actix_web::dev::Server;
+use actix_web::web::Data;
+use actix_web::{web, App, HttpServer};
+use actix_web::middleware::Logger;
 use sqlx::PgPool;
+use std::net::TcpListener;
 
 // No longer a binary entrypoint, there we mark it as async
 // without having to use any proc-macro incantation.
