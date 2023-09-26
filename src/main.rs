@@ -1,6 +1,6 @@
 use news_letter::configuration::get_configuration;
 use news_letter::startup::run;
-use env_logger;
+use env_logger::Env;
 use sqlx::PgPool;
 use std::net::TcpListener;
 
